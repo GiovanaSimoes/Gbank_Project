@@ -19,14 +19,14 @@ class ClientController(
         return ResponseEntity.ok(clientService.read(id))
     }
     @PostMapping("/create")
-    fun create(@RequestBody @Validated client: ClientDTO): ResponseEntity<ClientDTO> {
+    fun create(@RequestBody  client: ClientDTO): ResponseEntity<ClientDTO> {
         val clientCreated = clientService.create(clientConverter.convert(client))
 
         return ResponseEntity.ok(clientConverter.convert(clientCreated))
     }
 
     @PutMapping("/update/{id}")
-    fun update(@PathVariable("id") id: Long, @RequestBody @Validated client: Client): ResponseEntity<ClientDTO>{
+    fun update(@PathVariable("id") id: Long, @RequestBody client: Client): ResponseEntity<ClientDTO>{
         return ResponseEntity.ok(clientService.update(id, client))
     }
     @DeleteMapping("/delete/{id}")

@@ -18,5 +18,4 @@ class Client(
         return "Client(Id = $id, name ='$name', cpf = $cpf, email = '$email', cell = $cell)"
     }
 }
-//ColocR CPF COMO STRING
-//Utilizar o column
+
