@@ -8,15 +8,15 @@ import javax.persistence.Id
 class Client(
     @Id
     @GeneratedValue
-    var id: Long? = null,
+    var id: Long?=null,
     val name: String,
     val cpf: Long,
     val email: String,
     val cell: Int
-    )
-{
+) {
     override fun toString(): String {
         return "Client(Id = $id, name ='$name', cpf = $cpf, email = '$email', cell = $cell)"
     }
-
 }
+//ColocR CPF COMO STRING
+//Utilizar o column
