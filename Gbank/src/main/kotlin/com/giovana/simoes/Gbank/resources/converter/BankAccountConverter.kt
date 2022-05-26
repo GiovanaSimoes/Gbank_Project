@@ -1,8 +1,8 @@
-package com.giovana.simoes.Gbank.controller.resources.converter
+package com.giovana.simoes.Gbank.resources.converter
 
-import com.giovana.simoes.Gbank.controller.resources.dto.BankAccountDTO
 import com.giovana.simoes.Gbank.entity.BankAccount
 import com.giovana.simoes.Gbank.entity.Client
+import com.giovana.simoes.Gbank.resources.dto.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -30,6 +30,20 @@ class BankAccountConverter {
             owner = client,
             balance = balance
         )
+    }
 
+    fun convertOperations (bankAccount: BankAccount): OperationsResponse{
+        return OperationsResponse(
+            id = bankAccount.id,
+            balance = bankAccount.balance
+                )
+    }
+
+    fun convertWithDraw(bankAccount: BankAccount, notes:List<Notes>): WithDrawResponse{
+        return WithDrawResponse(
+            id = bankAccount.id,
+            balance = bankAccount.balance,
+            notes = notes
+        )
     }
 }

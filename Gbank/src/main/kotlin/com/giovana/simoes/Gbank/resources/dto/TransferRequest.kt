@@ -1,8 +1,6 @@
-package com.giovana.simoes.Gbank.controller.resources.dto
+package com.giovana.simoes.Gbank.resources.dto
 
 data class TransferRequest(
-
-
     val amount: Double,
     val idDestiny: Long
 ) {

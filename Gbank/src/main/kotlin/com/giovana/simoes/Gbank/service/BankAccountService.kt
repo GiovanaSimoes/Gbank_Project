@@ -1,11 +1,11 @@
 package com.giovana.simoes.Gbank.service
 
-import com.giovana.simoes.Gbank.controller.resources.converter.BankAccountConverter
-import com.giovana.simoes.Gbank.controller.resources.dto.*
 import com.giovana.simoes.Gbank.entity.BankAccount
 import com.giovana.simoes.Gbank.entity.Client
 import com.giovana.simoes.Gbank.repository.BankAccountRepository
 import com.giovana.simoes.Gbank.repository.ClientRepository
+import com.giovana.simoes.Gbank.resources.converter.BankAccountConverter
+import com.giovana.simoes.Gbank.resources.dto.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -30,7 +30,7 @@ class BankAccountService(
         return clientRepository.findById(id).orElse(null)
     }
 
-    fun withdraw(id: Long, withdrawRequest: WithdrawRequest): BankAccountDTO {
+    fun withdraw(id: Long, withdrawRequest: WithdrawRequest): WithDrawResponse {
         val findAccount = bankAccountRepository.findById(id).get()
         if (haveBalance(findAccount, withdrawRequest.amount) ){
             findAccount.balance -= withdrawRequest.amount
@@ -38,19 +38,19 @@ class BankAccountService(
             //return é correto ser aqui
         }
         //Aqui o certo seria lançar uma exceção
-        return bankAccountConverter.convert(findAccount)
+        return bankAccountConverter.convertWithDraw(findAccount, CashMachine.getNotes(withdrawRequest.amount.toInt()))
     }
     private fun haveBalance(bankAccount: BankAccount, amount: Double): Boolean = bankAccount.balance >= amount
 
-    fun deposit (id: Long, depositRequest: DepositRequest): BankAccountDTO{
+    fun deposit (id: Long, depositRequest: DepositRequest): OperationsResponse {
         val findAccount = bankAccountRepository.findById(id).get()
         findAccount.balance += depositRequest.amount
         bankAccountRepository.saveAndFlush(findAccount)
-        return bankAccountConverter.convert(findAccount)
+        return bankAccountConverter.convertOperations(findAccount)
     }
 
     @Transactional
-    fun transfer(idOrigin: Long,transferRequest: TransferRequest): BankAccountDTO{
+    fun transfer(idOrigin: Long,transferRequest: TransferRequest): OperationsResponse {
         val findAccountOrigin = bankAccountRepository.findById(idOrigin).get()
         val findAccountDestiny = bankAccountRepository.findById(transferRequest.idDestiny).get()
 
@@ -60,6 +60,6 @@ class BankAccountService(
             bankAccountRepository.saveAndFlush(findAccountDestiny)
             bankAccountRepository.saveAndFlush(findAccountOrigin)
         }
-            return bankAccountConverter.convert(findAccountOrigin)
+            return bankAccountConverter.convertOperations(findAccountOrigin)
     }
 }

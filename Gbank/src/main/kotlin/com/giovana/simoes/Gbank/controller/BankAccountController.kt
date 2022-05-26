@@ -1,10 +1,9 @@
 package com.giovana.simoes.Gbank.controller
 
-import com.giovana.simoes.Gbank.controller.resources.converter.BankAccountConverter
-import com.giovana.simoes.Gbank.controller.resources.dto.*
+import com.giovana.simoes.Gbank.resources.converter.BankAccountConverter
+import com.giovana.simoes.Gbank.resources.dto.*
 import com.giovana.simoes.Gbank.service.BankAccountService
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -26,9 +25,8 @@ class BankAccountController(
     }
 
     @PutMapping("/{id}/withdraw")
-    fun withdrawalRequest(@PathVariable("id") id: Long, @RequestBody withdrawRequest: WithdrawRequest): ResponseEntity<BankAccountDTO> {
-        val bankAccount = bankAccountService.withdraw(id,withdrawRequest)
-        return ResponseEntity.ok(bankAccount)
+    fun withdrawalRequest(@PathVariable("id") id: Long, @RequestBody withdrawRequest: WithdrawRequest): ResponseEntity<WithDrawResponse> {
+        return ResponseEntity.ok(bankAccountService.withdraw(id,withdrawRequest))
     }
     @PutMapping("/{id}/deposit")
     fun depositRequest(@PathVariable("id") id: Long, @RequestBody  depositRequest: DepositRequest): ResponseEntity<BankAccountDTO> {

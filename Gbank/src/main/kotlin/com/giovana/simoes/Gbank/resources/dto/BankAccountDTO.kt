@@ -1,4 +1,4 @@
-package com.giovana.simoes.Gbank.controller.resources.dto
+package com.giovana.simoes.Gbank.resources.dto
 
 import com.giovana.simoes.Gbank.entity.Client
 

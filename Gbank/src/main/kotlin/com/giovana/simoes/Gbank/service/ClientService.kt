@@ -1,7 +1,7 @@
 package com.giovana.simoes.Gbank.service
 
-import com.giovana.simoes.Gbank.controller.resources.converter.ClientConverter
-import com.giovana.simoes.Gbank.controller.resources.dto.ClientDTO
+import com.giovana.simoes.Gbank.resources.converter.ClientConverter
+import com.giovana.simoes.Gbank.resources.dto.ClientDTO
 import com.giovana.simoes.Gbank.entity.Client
 import com.giovana.simoes.Gbank.repository.ClientRepository
 import org.springframework.stereotype.Service

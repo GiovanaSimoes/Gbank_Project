@@ -1,6 +1,6 @@
-package com.giovana.simoes.Gbank.controller.resources.converter
+package com.giovana.simoes.Gbank.resources.converter
 
-import com.giovana.simoes.Gbank.controller.resources.dto.ClientDTO
+import com.giovana.simoes.Gbank.resources.dto.ClientDTO
 import com.giovana.simoes.Gbank.entity.Client
 import org.springframework.stereotype.Component
 

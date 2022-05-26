@@ -1,6 +1,4 @@
-package com.giovana.simoes.Gbank.controller.resources.dto
-
-
+package com.giovana.simoes.Gbank.resources.dto
 data class WithdrawRequest(
     val amount: Double
 ) {
