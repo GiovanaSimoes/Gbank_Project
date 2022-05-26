@@ -29,13 +29,13 @@ class BankAccountController(
         return ResponseEntity.ok(bankAccountService.withdraw(id,withdrawRequest))
     }
     @PutMapping("/{id}/deposit")
-    fun depositRequest(@PathVariable("id") id: Long, @RequestBody  depositRequest: DepositRequest): ResponseEntity<BankAccountDTO> {
+    fun depositRequest(@PathVariable("id") id: Long, @RequestBody  depositRequest: DepositRequest): ResponseEntity<OperationsResponse> {
         val bankAccount = bankAccountService.deposit(id,depositRequest)
         return ResponseEntity.ok(bankAccount)
     }
 
     @PostMapping("/{id}/transfer")
-    fun transferRequest(@PathVariable("id")id: Long,@RequestBody transferRequest: TransferRequest): ResponseEntity<BankAccountDTO>{
+    fun transferRequest(@PathVariable("id")id: Long,@RequestBody transferRequest: TransferRequest): ResponseEntity<OperationsResponse>{
         val bankAccount = bankAccountService.transfer(id, transferRequest)
         return ResponseEntity.ok(bankAccount)
     }
