@@ -4,6 +4,7 @@ import com.giovana.simoes.Gbank.resources.converter.BankAccountConverter
 import com.giovana.simoes.Gbank.resources.dto.*
 import com.giovana.simoes.Gbank.service.BankAccountService
 import org.springframework.http.ResponseEntity
+import javax.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -25,11 +26,11 @@ class BankAccountController(
     }
 
     @PutMapping("/{id}/withdraw")
-    fun withdrawalRequest(@PathVariable("id") id: Long, @RequestBody withdrawRequest: WithdrawRequest): ResponseEntity<WithDrawResponse> {
+    fun withdrawalRequest(@PathVariable("id") id: Long,@RequestBody withdrawRequest: WithdrawRequest): ResponseEntity<WithDrawResponse> {
         return ResponseEntity.ok(bankAccountService.withdraw(id,withdrawRequest))
     }
     @PutMapping("/{id}/deposit")
-    fun depositRequest(@PathVariable("id") id: Long, @RequestBody  depositRequest: DepositRequest): ResponseEntity<OperationsResponse> {
+    fun depositRequest(@PathVariable("id") id: Long,@Valid @RequestBody  depositRequest: DepositRequest): ResponseEntity<OperationsResponse> {
         val bankAccount = bankAccountService.deposit(id,depositRequest)
         return ResponseEntity.ok(bankAccount)
     }
