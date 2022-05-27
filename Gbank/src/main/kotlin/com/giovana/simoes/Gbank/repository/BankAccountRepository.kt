@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BankAccountRepository : JpaRepository<BankAccount, Long> {
-
 }

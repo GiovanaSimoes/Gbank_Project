@@ -17,11 +17,3 @@ class BankAccount(
         return "BankAccount(accountId = $id, name = ${owner.name} balance = R$$balance)"
     }
 }
-//Withdraw - Put/Path - Irá atualizar o saldo do cliente retirando o valor sacado
-//Transfer -  Post - Irá atualizar o saldo do cliente retirando o valor transferido e atualizar o saldo do cliente que recebeu a transferencia adicinando o valor
-//Deposit -  Put/Path - Irá atualizar o saldo do cliente acrescentando o valor de deposito
-
-//Get - Trás valores, read
-//Post - Cria um recurso
-//Put - Atualizar
-//Delete - deletar

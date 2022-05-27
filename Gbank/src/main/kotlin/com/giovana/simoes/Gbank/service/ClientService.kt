@@ -14,15 +14,18 @@ class ClientService(
     fun create(client: Client): Client {
         return clientRepository.save(client)
     }
-    fun read (id : Long): ClientDTO {
+
+    fun read(id: Long): ClientDTO {
         val clientRead = clientRepository.getById(id)
         return clientConverter.convert(clientRead)
     }
-    fun update (id: Long, client: Client): ClientDTO {
+
+    fun update(id: Long, client: Client): ClientDTO {
         client.id = id
-       return clientConverter.convert(clientRepository.saveAndFlush(client))
+        return clientConverter.convert(clientRepository.saveAndFlush(client))
     }
-    fun delete(id: Long){
+
+    fun delete(id: Long) {
         return clientRepository.deleteById(id)
     }
 }
