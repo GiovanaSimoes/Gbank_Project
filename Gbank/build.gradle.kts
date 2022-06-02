@@ -6,6 +6,7 @@ plugins {
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
+
 }
 
 group = "com.giovana.simoes"
@@ -18,6 +19,9 @@ repositories {
 	maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
+val kluentVersion = "1.68"
+val mockkVersion = "2.0.0"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -29,7 +33,8 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
-
+	testImplementation("com.ninja-squad:springmockk:$mockkVersion")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
 }
 
 tasks.withType<KotlinCompile> {

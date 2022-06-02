@@ -38,7 +38,7 @@ class BankAccountService(
             //return é correto ser aqui
         }
         //Aqui o certo seria lançar uma exceção
-        return bankAccountConverter.convertWithDraw(findAccount, CashMachine.getNotes(withdrawRequest.amount.toInt()))
+        return WithDrawResponse(id, findAccount.balance, CashMachine.getNotes(withdrawRequest.amount.toInt()))
     }
     private fun haveBalance(bankAccount: BankAccount, amount: Double): Boolean = bankAccount.balance >= amount
 
@@ -46,7 +46,7 @@ class BankAccountService(
         val findAccount = bankAccountRepository.findById(id).get()
         findAccount.balance += depositRequest.amount
         bankAccountRepository.saveAndFlush(findAccount)
-        return bankAccountConverter.convertOperations(findAccount)
+        return OperationsResponse(id, findAccount.balance)
     }
 
     @Transactional
@@ -60,6 +60,6 @@ class BankAccountService(
             bankAccountRepository.saveAndFlush(findAccountDestiny)
             bankAccountRepository.saveAndFlush(findAccountOrigin)
         }
-            return bankAccountConverter.convertOperations(findAccountOrigin)
+            return OperationsResponse(idOrigin,findAccountOrigin.balance)
     }
 }
