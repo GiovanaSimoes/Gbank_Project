@@ -119,4 +119,24 @@ class BankAccountServiceTest{
         Assertions.assertEquals(800.0,response.balance)
         Assertions.assertEquals(1200.0,bankAccountDestiny.balance)
     }
+    @Test
+    fun `should return if the account is vip case the balance is over one milion`(){
+        val balance = 2_000_000.0
+        val idOrigin = 1L
+        val bankAccountOrigin = BankAccount(
+            id = idOrigin,
+            owner = Client(
+                id = 1,
+                name = "Deysi",
+                cpf = 58668793445,
+                email = "deysi@gmail.com",
+                cell = 59834575
+            ),
+            balance = balance
+        )
+
+        val result = bankAccountService.isVip(bankAccountOrigin)
+
+        Assertions.assertEquals(true,result)
+    }
 }

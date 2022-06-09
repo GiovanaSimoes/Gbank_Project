@@ -62,4 +62,8 @@ class BankAccountService(
         }
             return OperationsResponse(idOrigin,findAccountOrigin.balance)
     }
+
+    fun isVip(bankAccountOrigin: BankAccount): Boolean{
+        return true
+    }
 }
