@@ -2,6 +2,7 @@ package com.giovana.simoes.Gbank.service
 
 import com.giovana.simoes.Gbank.entity.BankAccount
 import com.giovana.simoes.Gbank.entity.Client
+import com.giovana.simoes.Gbank.exceptions.InsufficientBalanceExceptions
 import com.giovana.simoes.Gbank.repository.BankAccountRepository
 import com.giovana.simoes.Gbank.repository.ClientRepository
 import com.giovana.simoes.Gbank.resources.converter.BankAccountConverter
@@ -14,6 +15,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.*
 
@@ -138,5 +140,72 @@ class BankAccountServiceTest{
         val result = bankAccountService.isVip(bankAccountOrigin)
 
         Assertions.assertEquals(true,result)
+    }
+    @Test
+    fun `should return false case the balance is smaller than value withdraw`() {
+        val balance = 100.0
+        val id = 1L
+        val withDrawResponse = mockk<WithDrawResponse>()
+        val withdrawRequest = WithdrawRequest(
+            amount = 150.0
+        )
+        val bankAccount = BankAccount(
+            id = id,
+            owner = Client(
+                id = 1,
+                name = "Deysi",
+                cpf = 58668793445,
+                email = "deysi@gmail.com",
+                cell = 59834575
+            ),
+            balance = balance
+        )
+
+        every { bankAccountRepository.findById(id) }.returns(Optional.of(bankAccount))
+        every { bankAccountRepository.saveAndFlush(any()) }.returns(bankAccount)
+        every { bankAccountConverter.convertWithDraw(any(), any()) }.returns(withDrawResponse)
+
+        assertThrows<InsufficientBalanceExceptions> {
+            bankAccountService.withdraw(id, withdrawRequest)
+        }
+    }
+
+    @Test
+    fun `should return false case the balance is smaller than value transfer`() {
+        val idOrigin = 1L
+        val transferRequest = TransferRequest(
+            amount = 200.0,
+            idDestiny = 2
+        )
+        val bankAccountOrigin = BankAccount(
+            id = idOrigin,
+            owner = Client(
+                id = 1,
+                name = "Deysi",
+                cpf = 58668793445,
+                email = "deysi@gmail.com",
+                cell = 59834575
+            ),
+            balance = 100.0
+        )
+        val bankAccountDestiny = BankAccount(
+            id = idOrigin,
+            owner = Client(
+                id = 1,
+                name = "Giovana",
+                cpf = 58668793445,
+                email = "giovana@gmail.com",
+                cell = 59834575
+            ),
+            balance = 1000.0
+        )
+        every { bankAccountRepository.findById(idOrigin) }.returns(Optional.of(bankAccountOrigin))
+        every { bankAccountRepository.findById(transferRequest.idDestiny) }.returns(Optional.of(bankAccountDestiny))
+        every { bankAccountRepository.saveAndFlush(any()) }.returns(bankAccountOrigin)
+        every { bankAccountRepository.saveAndFlush(any()) }.returns(bankAccountDestiny)
+
+        assertThrows<InsufficientBalanceExceptions> {
+            bankAccountService.transfer(idOrigin, transferRequest)
+        }
     }
 }

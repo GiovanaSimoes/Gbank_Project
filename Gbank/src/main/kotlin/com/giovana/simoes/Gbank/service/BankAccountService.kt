@@ -2,6 +2,7 @@ package com.giovana.simoes.Gbank.service
 
 import com.giovana.simoes.Gbank.entity.BankAccount
 import com.giovana.simoes.Gbank.entity.Client
+import com.giovana.simoes.Gbank.exceptions.InsufficientBalanceExceptions
 import com.giovana.simoes.Gbank.repository.BankAccountRepository
 import com.giovana.simoes.Gbank.repository.ClientRepository
 import com.giovana.simoes.Gbank.resources.converter.BankAccountConverter
@@ -32,17 +33,17 @@ class BankAccountService(
 
     fun withdraw(id: Long, withdrawRequest: WithdrawRequest): WithDrawResponse {
         val findAccount = bankAccountRepository.findById(id).get()
-        if (haveBalance(findAccount, withdrawRequest.amount) ){
+        if (haveBalance(findAccount, withdrawRequest.amount)) {
             findAccount.balance -= withdrawRequest.amount
             bankAccountRepository.saveAndFlush(findAccount)
-            //return é correto ser aqui
+            return WithDrawResponse(id, findAccount.balance, CashMachine.getNotes(withdrawRequest.amount.toInt()))
         }
-        //Aqui o certo seria lançar uma exceção
-        return WithDrawResponse(id, findAccount.balance, CashMachine.getNotes(withdrawRequest.amount.toInt()))
+        throw InsufficientBalanceExceptions("Saldo insuficiente!!")
     }
+
     private fun haveBalance(bankAccount: BankAccount, amount: Double): Boolean = bankAccount.balance >= amount
 
-    fun deposit (id: Long, depositRequest: DepositRequest): OperationsResponse {
+    fun deposit(id: Long, depositRequest: DepositRequest): OperationsResponse {
         val findAccount = bankAccountRepository.findById(id).get()
         findAccount.balance += depositRequest.amount
         bankAccountRepository.saveAndFlush(findAccount)
@@ -50,20 +51,21 @@ class BankAccountService(
     }
 
     @Transactional
-    fun transfer(idOrigin: Long,transferRequest: TransferRequest): OperationsResponse {
+    fun transfer(idOrigin: Long, transferRequest: TransferRequest): OperationsResponse {
         val findAccountOrigin = bankAccountRepository.findById(idOrigin).get()
         val findAccountDestiny = bankAccountRepository.findById(transferRequest.idDestiny).get()
 
-        if(haveBalance(findAccountOrigin,transferRequest.amount)){
+        if (haveBalance(findAccountOrigin, transferRequest.amount)) {
             findAccountOrigin.balance -= transferRequest.amount
             findAccountDestiny.balance += transferRequest.amount
             bankAccountRepository.saveAndFlush(findAccountDestiny)
             bankAccountRepository.saveAndFlush(findAccountOrigin)
+            return OperationsResponse(idOrigin, findAccountOrigin.balance)
         }
-            return OperationsResponse(idOrigin,findAccountOrigin.balance)
+        throw InsufficientBalanceExceptions("Saldo insuficiente!!")
     }
 
-    fun isVip(bankAccountOrigin: BankAccount): Boolean{
+    fun isVip(bankAccountOrigin: BankAccount): Boolean {
         return true
     }
 }
